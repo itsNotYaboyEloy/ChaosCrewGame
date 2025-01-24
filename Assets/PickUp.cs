@@ -29,7 +29,11 @@ public class PickUp : MonoBehaviour
 
         if (collision.CompareTag(this.player.deliveryStation))
         {
-            this.player.score++;
+            if (this.player.doubleMoney)
+                this.player.score += 2;
+            else
+                this.player.score += 1;
+
             Debug.Log(player.score);
             player.scoreUI.text = $"{player.score}";
             this.player.pickUp = null;

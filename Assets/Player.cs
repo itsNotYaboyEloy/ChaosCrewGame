@@ -6,18 +6,33 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+    //Movement
     public float moveSpeed;
     public Rigidbody2D rb;
     private Vector2 moveInput;
-
+    //Movement Keys
     public string xAxisName;
     public string yAxisName;
+    //Interact
     public string interactName;
+    //Score
     public int score;
     public TMP_Text scoreUI;
 
+    //Pickups & Delivery
     public PickUp pickUp;
     public string deliveryStation;
+
+    //PowerUps
+        public float powerUpDisableTime = 0;
+        //DoubleMoney
+        public bool doubleMoney;
+        // 
+        public bool higherSpeed;
+        // 
+        public bool lowerSpeed;
+        //
+        public bool confusion;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +43,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float moveSpeed = this.moveSpeed;
+        if (lowerSpeed)
+            moveSpeed /= 2;
+        else if (higherSpeed)
+            moveSpeed *= 2;
+        else if (confusion)
+            moveSpeed *= -1;
+
         moveInput.x = Input.GetAxisRaw(xAxisName);
         moveInput.y = Input.GetAxisRaw(yAxisName);
 
@@ -58,8 +81,16 @@ public class Player : MonoBehaviour
                 }
             }
         }
-    }
 
+
+        if (Time.time > this.powerUpDisableTime)
+        {
+            doubleMoney = false;
+            lowerSpeed = false;
+            higherSpeed = false;
+            confusion = false;
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("PickUp"))
@@ -72,7 +103,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("PickUp"))

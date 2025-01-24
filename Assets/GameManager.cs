@@ -5,7 +5,9 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    private float timer = 10.0f;
+    private float timer = 120.0f;
+    private float nextActionTime = 0.0f;
+    private float timePeriod = 20.0f;
     public TMP_Text timerUI;
 
     public Player player1;
@@ -13,10 +15,22 @@ public class GameManager : MonoBehaviour
     public GameObject endStatePanel;
     public TMP_Text winnerText;
 
+    //List of Prefabs
+    public GameObject SpeedUP;
+    public GameObject SpeedDOWN;
+    public GameObject DOUBLEMoney;
+    public GameObject Confusion;
+    public GameObject Object;
+
+    List<GameObject> powerupList = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        powerupList.Add(SpeedUP);
+        powerupList.Add(SpeedDOWN);
+        powerupList.Add(DOUBLEMoney);
+        powerupList.Add(Confusion);
     }
 
     // Update is called once per frame
@@ -42,6 +56,30 @@ public class GameManager : MonoBehaviour
             {
                 winnerText.text = "Player 2 Wins";
             }
+        }
+
+        //SpawnItems every 20
+        if (Time.time > nextActionTime)
+        {
+            nextActionTime += timePeriod;
+            SpawnItems();
+        }
+    }
+
+    private void SpawnItems()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int powerupListIndex = Random.Range(0, 4);
+            GameObject powerUp = powerupList[powerupListIndex];
+            powerUp.transform.position = new Vector3(Random.Range(-13, 13), Random.Range(-5, 5), -1);
+            Instantiate(powerUp);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            Object.transform.position = new Vector3(Random.Range(-13, 13), Random.Range(-5, 5), -1);
+            Instantiate(Object);
         }
     }
 }

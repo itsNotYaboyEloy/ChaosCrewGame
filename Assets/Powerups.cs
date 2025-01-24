@@ -6,9 +6,6 @@ public class Powerups : MonoBehaviour
 {
     public Type type;
 
-    public float speedup = 2f;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +36,8 @@ public class Powerups : MonoBehaviour
     {
         DoubleSpeed,
         SlowDown,
+        DoubleMoney,
+        Confusion,
     }
 }
 
@@ -46,14 +45,21 @@ public static class TypeExtensions
 {
     public static void Apply(this Powerups.Type type, Powerups powerups, Player player)
     {
+        player.powerUpDisableTime = Time.time + 15.0f;
+
         switch (type)
         {
             case Powerups.Type.DoubleSpeed:
-                player.moveSpeed *= powerups.speedup;
+                player.higherSpeed = true;
                 break;
-
             case Powerups.Type.SlowDown:
-                player.moveSpeed /= powerups.speedup;
+                player.lowerSpeed = true;
+                break;
+            case Powerups.Type.DoubleMoney:
+                player.doubleMoney = true;
+                break;
+            case Powerups.Type.Confusion:
+                player.confusion = true;
                 break;
         }
     }
